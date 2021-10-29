@@ -1,15 +1,30 @@
+{{- if or .Values.knativeDeploy .Values.canary.enabled }}
+{{- else }}
 apiVersion: v1
 kind: Service
 metadata:
+{{- if .Values.service.name }}
+  name: {{ .Values.service.name }}
+{{- else }}
+  name: {{ template "fullname" . }}
+{{- end }}
   labels:
-    apps: ballot
-  name: { { .Values.ballot.serviceName } }
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}"
+{{- if .Values.service.labels }}
+{{ toYaml .Values.service.labels | indent 4 }}
+{{- end }}
+{{- if .Values.service.annotations }}
+  annotations:
+{{ toYaml .Values.service.annotations | indent 4 }}
+{{- end }}
 spec:
-  type: NodePort
-  selector:
-    app: ballot
+  type: {{ .Values.service.type }}
   ports:
-    - name: ballot
-      port: { { .Values.ballot.servicePort } }
-      targetPort: { { .Values.ballot.targetPort } }
-      # nodePort: {{.Values.ballot.nodePort}}
+  - port: {{ .Values.service.externalPort }}
+    targetPort: {{ .Values.service.internalPort }}
+    protocol: TCP
+    name: http
+  selector:
+    app: {{ template "fullname" . }}
+{{- end }}
+

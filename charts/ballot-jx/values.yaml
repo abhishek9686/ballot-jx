@@ -10,7 +10,7 @@ podsLabels: {}
 deploymentLabels: {}
 
 image:
-  repository: local-registry:5002/ballot
+  repository: ballot
   tag: latest
   pullPolicy: Always
 
@@ -60,14 +60,6 @@ canary:
   labels: {}
   # Add labels to the canary gateway
   gatewayLabels: {}
-
-ballot:
-  image: local-registry:5002/ballot:latest
-  # Ballot replica MUST always be 1 as it's in-memory ballot
-  replica: 1
-  serviceName: ballot
-  servicePort: 80
-  targetPort: 8080
 
 service:
   name: ballot-jx
