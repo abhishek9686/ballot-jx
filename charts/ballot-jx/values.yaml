@@ -10,9 +10,9 @@ podsLabels: {}
 deploymentLabels: {}
 
 image:
-  repository: draft
-  tag: dev
-  pullPolicy: IfNotPresent
+  repository: local-registry:5002/ballot
+  tag: latest
+  pullPolicy: Always
 
 # optional list of image pull secrets to use to pull images
 jx:
@@ -61,6 +61,14 @@ canary:
   # Add labels to the canary gateway
   gatewayLabels: {}
 
+ballot:
+  image: local-registry:5002/ballot:latest
+  # Ballot replica MUST always be 1 as it's in-memory ballot
+  replica: 1
+  serviceName: ballot
+  servicePort: 80
+  targetPort: 8080
+
 service:
   name: ballot-jx
   type: ClusterIP
@@ -107,7 +115,7 @@ serviceAccount:
   enabled: true
   name: ""
   annotations: {}
-#    iam.gke.io/gcp-service-account: my-sa-in-gke
+  #    iam.gke.io/gcp-service-account: my-sa-in-gke
   # Add labels to the SA
   labels: {}
 #    my-custom-label: value
@@ -131,5 +139,3 @@ jxRequirements:
       enabled: false
       production: false
       secretName: ""
-
-
