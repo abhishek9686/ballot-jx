@@ -68,7 +68,7 @@ func serveRoot(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
 		defer r.Body.Close()
-		log.Println("result request received")
+		log.Println("result received")
 		res := Response{}
 		votes := getCandidatesVote()
 		for candidateID, votes := range votes {
