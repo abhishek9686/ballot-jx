@@ -84,7 +84,7 @@ func serveRoot(w http.ResponseWriter, r *http.Request) {
 
 		out, err := json.Marshal(res)
 		if err != nil {
-			log.Println("error marshaling response to result request. error: ", err)
+			log.Println("error marshaling response to result request: ", err)
 		}
 		w.Header().Set("Content-Type", "application/json")
 		w.Write(out)
@@ -98,7 +98,7 @@ func serveRoot(w http.ResponseWriter, r *http.Request) {
 		decoder := json.NewDecoder(r.Body)
 		err := decoder.Decode(&vote)
 		if err != nil {
-			log.Printf("error parsing vote data. error: %v\n", err)
+			log.Printf("parsing vote data. error: %v\n", err)
 			status.Code = http.StatusBadRequest
 			status.Message = "Vote is not valid. Vote can not be saved"
 			writeVoterResponse(w, status)
